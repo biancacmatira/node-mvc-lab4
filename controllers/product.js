@@ -2,7 +2,7 @@ const Product = require('../models/product');
 
 exports.getAddProducts = (req, res, next) => {
     res.render('add-product', {
-        pageTitle: 'Add a product',
+        pageTitle: 'Add a product'
     });
 }
 
@@ -13,7 +13,6 @@ exports.getProducts = (req, res, next) => {
             products: fetchedProducts
         });
     });
-    
 };
 
 exports.postAddProduct = (req, res, next) => {
@@ -51,6 +50,12 @@ exports.getOneProductByForm = (req, res, next) => {
             pageTitle: fetchedProduct.name
         });
     }
+}
+
+exports.postDeleteProduct = (req,res,next) => {
+    const productId = req.body.productId;
+    Product.deleteById(productId);
+    res.redirect('/');
 }
 
 

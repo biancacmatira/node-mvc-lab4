@@ -51,4 +51,11 @@ module.exports = class Product{
         }
     }
 
+    static deleteById(id){
+        const products = JSON.parse(fs.readFileSync(dataPath));
+        const updateProducts = products.filter(prod => prod.id !== +id);
+        fs.writeFile(dataPath, JSON.stringify(updateProducts,null,2), err => {
+            if(err) throw err;
+        })
+    } 
 }
