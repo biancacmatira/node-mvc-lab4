@@ -7,11 +7,13 @@ exports.getAddProducts = (req, res, next) => {
 }
 
 exports.getProducts = (req, res, next) => {
-    const fetchedProducts = Product.fetchAll();
-    res.render('shop', {
-        pageTitle: 'Shop Page',
-        products: fetchedProducts
+    Product.fetchAll(fetchedProducts => {
+        res.render('shop', {
+            pageTitle: 'Shop Page',
+            products: fetchedProducts
+        });
     });
+    
 };
 
 exports.postAddProduct = (req, res, next) => {
@@ -19,6 +21,37 @@ exports.postAddProduct = (req, res, next) => {
     product.save();
     res.redirect('/');
 };
+
+exports.getOneProductById = (req,res,next) => {
+    const fetchedProduct = Product.fetchOneProduct(req.params.productId);
+    // res.render('product', );
+    if(fetchedProduct.msg){
+        res.render('404', {
+           message: fetchedProduct.msg,
+           pageTitle: 'Id not found'  
+        });
+    }else{
+        res.render('product', {
+            product: fetchedProduct,
+            pageTitle: fetchedProduct.name
+        });
+    }
+}
+
+exports.getOneProductByForm = (req, res, next) => {
+    const fetchedProduct = Product.fetchOneProduct(req.body.productId);
+    if(fetchedProduct.msg){
+        res.render('404', {
+           message: fetchedProduct.msg,
+           pageTitle: 'Id not found'  
+        });
+    }else{
+        res.render('product', {
+            product: fetchedProduct,
+            pageTitle: fetchedProduct.name
+        });
+    }
+}
 
 
 function addZeroes(num){

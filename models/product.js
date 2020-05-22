@@ -24,15 +24,31 @@ module.exports = class Product{
         })
     }
 
-    static fetchAll(){
-        // fs.readFile(dataPath, (err, data) => {
-        //     if(err){
-        //         return [];
-        //     }
-        //     return JSON.parse(data);
-        // })
+    static fetchAll(cb){
+        // this is async, good for large data
+        fs.readFile(dataPath, (err, data) => {
+            if(err){
+                // return [];
+                cb([]);
+            }else{
+                cb(JSON.parse(data));
+            }
+            // return JSON.parse(data);
+        })
 
-        return JSON.parse(fs.readFileSync(dataPath));
+        // this is synchronous, good for small scale data
+        // return JSON.parse(fs.readFileSync(dataPath));
+    }
+
+    static fetchOneProduct(id){
+        const products = JSON.parse(fs.readFileSync(dataPath));
+        const found = products.some(prod => prod.id == id);
+
+        if(found){
+            return products.find(prod => prod.id == id);
+        }else{
+            return { msg: `Product with id of (${id}) is not found!`}
+        }
     }
 
 }
